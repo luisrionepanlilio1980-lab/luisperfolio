@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LUIS portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #060d1f;
+    --bg2: #0b1630;
+    --bg3: #0f1e40;
+    --accent: #3b82f6;
+    --accent2: #60a5fa;
+    --glow: rgba(59,130,246,0.35);
+    --text: #e2eaf8;
+    --muted: #7a9cc5;
+    --card: rgba(15,30,64,0.85);
+    --border: rgba(59,130,246,0.2);
+    --nav-w: 240px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  /* ── Starfield background ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,.55) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 70%, rgba(255,255,255,.35) 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 25%, rgba(255,255,255,.45) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 60%, rgba(255,255,255,.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 20% 90%, rgba(255,255,255,.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 65% 80%, rgba(255,255,255,.25) 0%, transparent 100%),
+      radial-gradient(2px 2px at 45% 50%, rgba(99,179,250,.5) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Sidebar nav ── */
+  nav {
+    width: var(--nav-w);
+    min-height: 100vh;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 2.5rem 1.2rem;
+    position: fixed;
+    top: 0; left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  nav .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent2);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    padding-left: 0.4rem;
+  }
+
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+
+  nav a svg { flex-shrink: 0; opacity: 0.7; transition: opacity 0.2s; }
+
+  nav a:hover,
+  nav a.active {
+    background: rgba(59,130,246,0.12);
+    color: var(--accent2);
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+
+  nav a:hover svg, nav a.active svg { opacity: 1; }
+
+  /* ── Main content ── */
+  main {
+    margin-left: var(--nav-w);
+    flex: 1;
+    padding: 3.5rem 4rem;
+    position: relative;
+    z-index: 1;
+    max-width: calc(100vw - var(--nav-w));
+  }
+
+  /* ── Section headings ── */
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent) 0%, transparent 70%);
+    margin-bottom: 2.5rem;
+    margin-top: 0.5rem;
+  }
+
+  /* ── Section spacing ── */
+  section {
+    margin-bottom: 6rem;
+    scroll-margin-top: 2rem;
+  }
+
+  /* ── About Me ── */
+  #about .avatar-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  #about .avatar {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #1e40af, #0b1630 70%);
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 40px var(--glow), 0 0 80px rgba(59,130,246,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #about .avatar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 60% 30%, rgba(96,165,250,0.3), transparent 60%);
+  }
+
+  #about .bio {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.8rem 2rem;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--text);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.3);
+  }
+
+  #about .bio strong { color: var(--accent2); font-weight: 600; }
+
+  /* ── Education ── */
+  .edu-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.4rem 1.8rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+
+  .edu-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px var(--glow);
+  }
+
+  .edu-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .edu-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent2);
+    margin-bottom: 0.3rem;
+  }
+
+  .edu-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .edu-meta {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* ── Projects ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.4rem;
+  }
+
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.6rem;
+    backdrop-filter: blur(8px);
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    cursor: pointer;
+  }
+
+  .project-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: 0 8px 32px var(--glow);
+  }
+
+  .project-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .project-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    background: rgba(59,130,246,0.12);
+    border: 1px solid var(--border);
+    color: var(--accent2);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 99px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* ── Skills ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .skill-bar-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .skill-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.6rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .skill-name span { color: var(--accent2); font-size: 0.8rem; }
+
+  .bar-track {
+    height: 5px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    box-shadow: 0 0 8px var(--glow);
+    transition: width 1s cubic-bezier(.25,.8,.25,1);
+  }
+
+    .avatar img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; /* makes it circle */
+    object-fit: cover;
+}
+
+
+
+  /* ── Dark mode toggle ── */
+  .theme-btn {
+    position: fixed;
+    top: 1.2rem;
+    right: 1.5rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--accent2);
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    z-index: 200;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+
+  .project-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.project-card.active .project-content {
+  max-height: 500px;
+}
+
+  .theme-btn:hover { box-shadow: 0 0 12px var(--glow); background: var(--bg3); }
+
+  /* ── Responsive ── */
+  @media (max-width: 700px) {
+    nav { width: 100%; min-height: auto; flex-direction: row; position: relative; overflow-x: auto; padding: 1rem; border-right: none; border-bottom: 1px solid var(--border); }
+    nav .logo { display: none; }
+    main { margin-left: 0; padding: 2rem 1.2rem; max-width: 100vw; }
+    body { flex-direction: column; }
+  }
+
+  /* ── Fade-in animation ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  section { animation: fadeUp 0.6s ease both; }
+  #about  { animation-delay: 0s; }
+  #education { animation-delay: 0.1s; }
+  #skills    { animation-delay: 0.2s; }
+  #projects  { animation-delay: 0.3s; }
+
+.project-content button {
+  display: block;
+  width: 100%;
+  margin: 6px 0;
+  padding: 8px;
+
+  background: transparent; /* matches card */
+  border: 1px solid var(--border);
+  color: var(--text);
+
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+
+  transition: all 0.2s ease;
+}
+
+.project-content button:hover {
+  background: rgba(59,130,246,0.15);
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+</style>
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<nav id="sidebar">
+  <div class="logo">LUIS Portfolio</div>
+
+  <a href="#about" class="active">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    About Me
+  </a>
+
+  <a href="#education">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+    Education
+  </a>
+
+  <a href="#skills">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    Skills
+  </a>
+
+  <a href="#projects">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+    Projects
+  </a>
+</nav>
+
+
+
+
+<!-- Main scrollable content -->
+<main>
+
+  <!-- ── About Me ── -->
+  <section id="about">
+    <h2 class="section-title">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      About Me
+    </h2>
+    <div class="section-divider"></div>
+
+    <div class="avatar-wrap">
+      <div class="avatar"><img src="picture.jpg.jfif" alt="My Photo"></div>
+    </div>
+
+    <div class="bio">
+      I am a <strong>first-year Bachelor of Science in Information Technology</strong> student at PSAU with a passion for
+      <strong>technology</strong>. I'm eager to develop my skills in
+      <strong>Programming, Editing, Gaming</strong>. Currently, I'm also exploring
+      my programming skills to enhance my <strong>programming skills and critical thinking abilities</strong>.
+      Always open to learning and new opportunities!
+    </div>
+  </section>
+
+  <!-- ── Education ── -->
+  <section id="education">
+    <h2 class="section-title">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      Education
+    </h2>
+    <div class="section-divider"></div>
+
+    <div class="edu-card">
+      <div class="edu-dot"></div>
+      <div>
+        <div class="edu-label">College</div>
+        <div class="edu-name">Pampanga State Agricultural University</div>
+        <div class="edu-meta">BS Information Technology &nbsp;·&nbsp; Currently Enrolled</div>
+      </div>
+    </div>
+
+    <div class="edu-card">
+      <div class="edu-dot"></div>
+      <div>
+        <div class="edu-label">Senior High School</div>
+        <div class="edu-name">Don Jesus Gonzales High School</div>
+        <div class="edu-meta">ICT Strand &nbsp;·&nbsp; Graduated 2025</div>
+      </div>
+    </div>
+
+    <div class="edu-card">
+      <div class="edu-dot"></div>
+      <div>
+        <div class="edu-label">Junior High School</div>
+        <div class="edu-name">Don Jesus Gonzales High School</div>
+        <div class="edu-meta">Graduated 2023</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Skills ── -->
+  <section id="skills">
+    <h2 class="section-title">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Skills
+    </h2>
+    <div class="section-divider"></div>
+
+    <div class="skills-grid" id="skills-grid">
+      <div class="skill-bar-wrap"><div class="skill-name">Programming <span>40%</span></div><div class="bar-track"><div class="bar-fill" data-w="40%" style="width:0"></div></div></div>
+      <div class="skill-bar-wrap"><div class="skill-name">Editing <span>50%</span></div><div class="bar-track"><div class="bar-fill" data-w="50%" style="width:0"></div></div></div>
+      <div class="skill-bar-wrap"><div class="skill-name">Gaming <span>99%</span></div><div class="bar-track"><div class="bar-fill" data-w="99%" style="width:0"></div></div></div>
+      <div class="skill-bar-wrap"><div class="skill-name">Problem Solving <span>70%</span></div><div class="bar-track"><div class="bar-fill" data-w="70%" style="width:0"></div></div></div>
+      <div class="skill-bar-wrap"><div class="skill-name">Critical thinking <span>80%</span></div><div class="bar-track"><div class="bar-fill" data-w="80%" style="width:0"></div></div></div>
+  
+    </div>
+  </section>
+
+  <!-- ── Projects ── -->
+  <section id="projects">
+    <h2 class="section-title">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+      Projects
+    </h2>
+    <div class="section-divider"></div>
+
+    <div class="projects-grid">
+
+  <div class="project-card">
+    <div class="project-icon">📋</div>
+    <div class="project-title">MidTermLab Task 1</div>
+    <div class="project-desc">Resume Writing using HTML</div>
+
+    <div class="project-content" onclick="event.stopPropagation()">
+      <button onclick="window.open('nani1.png', '_blank')">Sample Output</button>
+      <button onclick="window.open('nani2.png', '_blank')">Sample Code</button>
+      <button onclick="window.open('https://pastebin.com/W3j9YUzY', '_blank')">Source Code</button>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <div class="project-icon">📋</div>
+    <div class="project-title">MidTermLab Task 2</div>
+    <div class="project-desc">HTML list and table</div>
+
+    <div class="project-content" onclick="event.stopPropagation()">
+      <button onclick="window.open('nani3.png', '_blank')">Sample Output</button>
+      <button onclick="window.open('nani4.png', '_blank')">Sample Code</button>
+      <button onclick="window.open('https://pastebin.com/sVApX6Y9', '_blank')">Source Code</button>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <div class="project-icon">📋</div>
+    <div class="project-title">MidTermLab Task 3</div>
+    <div class="project-desc">HTML form</div>
+
+    <div class="project-content" onclick="event.stopPropagation()">
+      <button onclick="window.open('nani5.png', '_blank')">Sample Output</button>
+      <button onclick="window.open('nani6.png', '_blank')">Sample Code</button>
+      <button onclick="window.open('https://pastebin.com/kPMmBjsY', '_blank')">Source Code</button>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <div class="project-icon">📋</div>
+    <div class="project-title">MidTermLab Task 4</div>
+    <div class="project-desc">Image map</div>
+
+    <div class="project-content" onclick="event.stopPropagation()">
+      <button onclick="window.open('nani11.png', '_blank')">Sample Output</button>
+      <button onclick="window.open('nani12.png', '_blank')">Sample Code</button>
+      <button onclick="window.open('https://pastebin.com/C4F8PU16')">Source Code</button>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <div class="project-icon">📋</div>
+    <div class="project-title">MidTermLab Task 5</div>
+    <div class="project-desc">Applying CSS to Resume</div>
+
+    <div class="project-content" onclick="event.stopPropagation()">
+      <button onclick="window.open('nani7.png', '_blank')">Sample Output</button>
+      <button onclick="window.open('nani8.png', '_blank')">Sample Code</button>
+      <button onclick="window.open('https://pastebin.com/cUQJtfCY', '_blank', '_blank')">Source Code</button>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <div class="project-icon">📋</div>
+    <div class="project-title">MidTermLab Task 6</div>
+    <div class="project-desc">HTML Layout using Divs and Semantic Elements</div>
+
+    <div class="project-content" onclick="event.stopPropagation()">
+      <button onclick="window.open('nani9.png', '_blank')">Sample Output</button>
+      <button onclick="window.open('nani10.png', '_blank')">Sample Code</button>
+      <button onclick="window.open('https://pastebin.com/AzKxptLy', '_blank')">Source Code</button>
+    </div>
+  </div>
+
+</div>
+  </section>
+
+</main>
+
+<script>
+  // ── Active nav link on scroll ──
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(s => observer.observe(s));
+
+  // ── Animate skill bars on scroll ──
+  const barObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.bar-fill').forEach(bar => {
+          bar.style.width = bar.dataset.w;
+        });
+        barObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  barObserver.observe(document.getElementById('skills-grid'));
+
+  // ── Smooth scroll on nav click ──
+  navLinks.forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+<script>
+document.querySelectorAll(".project-card").forEach(card => {
+  card.addEventListener("click", () => {
+    document.querySelectorAll(".project-card").forEach(c => {
+      if (c !== card) c.classList.remove("active");
+    });
+    card.classList.toggle("active");
+  });
+});
+</script>
+</body>
+</html>
